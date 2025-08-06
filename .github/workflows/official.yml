@@ -20,6 +20,18 @@ jobs:
         with:
           repository: wkhtmltopdf/packaging
           path: packaging
+      - name: Locate Visual Studio & set VS140COMNTOOLS
+        shell: pwsh
+        run: |
+          # find the latest VS installation
+          $vsInstall = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+            -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath
+          # point the old VS140COMNTOOLS at its Common7\Tools folder
+          $toolsDir = Join-Path $vsInstall 'Common7\Tools\'
+          echo "VS140COMNTOOLS=$toolsDir" >> $env:GITHUB_ENV
+
       - name: setup build environment
         run: |
           choco install -yr --no-progress vcbuildtools -ia "/Full"
