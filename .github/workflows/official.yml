@@ -20,6 +20,18 @@ jobs:
         with:
           repository: wkhtmltopdf/packaging
           path: packaging
+
+      - name: Manually set VS140COMNTOOLS for script compatibility
+        shell: pwsh
+        run: |
+          $vsInstall = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+            -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath
+
+          $vcToolsPath = Join-Path $vsInstall 'VC\Auxiliary\Build'
+          echo "VS140COMNTOOLS=$vcToolsPath" >> $env:GITHUB_ENV
+
       - name: Locate Visual Studio and expose vcvarsall.bat path
         shell: pwsh
         run: |
