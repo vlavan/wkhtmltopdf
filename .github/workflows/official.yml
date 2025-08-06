@@ -8,7 +8,7 @@ on:
 jobs:
   windows:
     name: Qt 4.8 on Windows
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: checkout source
         uses: actions/checkout@v2
