@@ -9,41 +9,37 @@ on:
 
 jobs:
   windows:
-    name: Qt 4.8 on Windows
     runs-on: windows-latest
     env:
       CONAN_USER_HOME: C:\.conan
 
     steps:
-      - name: checkout source
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           path: wkhtmltopdf
           submodules: true
 
-      - name: checkout packaging
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: wkhtmltopdf/packaging
           path: packaging
 
-      - name: Install Conan 2.x
-        run: pip install --upgrade conan
-
-      - name: Install build tools & deps
+      - name: Install Python & Conan
         run: |
           choco install -y python3
-          choco install -y visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
-          pip install --upgrade conan
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade conan
 
-      - name: Detect and configure Conan profile
+      - name: Verify Conan 2.x
         run: |
-          conan profile detect
-          conan config set profiles.default.settings.compiler.runtime=dynamic
-          conan config set profiles.default.settings.compiler.cppstd=14
-          # Add any other overrides you need, for example:
-          # conan config set profiles.default.settings.compiler.version=194
-          # conan config set profiles.default.settings.build_type=Release
+          conan --version
+          where conan
+
+      - name: Configure Conan profile
+        run: |
+          python -m conan profile detect
+          python -m conan config set profiles.default.settings.compiler.runtime=dynamic
+          python -m conan config set profiles.default.settings.compiler.cppstd=14
 
       - name: Build wkhtmltopdf natively
         run: |
