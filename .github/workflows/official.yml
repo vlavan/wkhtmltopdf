@@ -20,15 +20,16 @@ jobs:
         with:
           repository: wkhtmltopdf/packaging
           path: packaging
-      - name: Locate VS & set VS140COMNTOOLS to the correct Build folder
+      - name: Locate VS & set VS140COMNTOOLS to vcvarsall.bat
         shell: pwsh
         run: |
           $vsInstall = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
             -latest -products * `
             -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
             -property installationPath
-          $auxBuild = Join-Path $vsInstall 'VC\Auxiliary\Build'
-          echo "VS140COMNTOOLS=$auxBuild" >> $env:GITHUB_ENV
+
+          $vcVarsPath = Join-Path $vsInstall 'VC\Auxiliary\Build\vcvarsall.bat'
+          echo "VS140COMNTOOLS=$vcVarsPath" >> $env:GITHUB_ENV
 
       - name: setup build environment
         run: |
