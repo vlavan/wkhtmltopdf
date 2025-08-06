@@ -41,6 +41,10 @@ jobs:
           conan config set profiles.default.settings.compiler.runtime=dynamic
           conan config set profiles.default.settings.compiler.cppstd=14
 
+      - name: Install Conan configuration
+        run: |
+          conan config install packaging/conan-config --type dir
+
       - name: Build wkhtmltopdf natively
         run: |
           cd packaging
