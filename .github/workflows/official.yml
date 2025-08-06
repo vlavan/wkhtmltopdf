@@ -35,12 +35,6 @@ jobs:
           conan --version
           where conan
 
-      - name: Configure Conan profile
-        run: |
-          conan profile detect --force
-          conan config set profiles.default.settings.compiler.runtime=dynamic
-          conan config set profiles.default.settings.compiler.cppstd=14
-
       - name: Install Conan configuration
         run: |
           conan config install packaging/conan-config --type dir
