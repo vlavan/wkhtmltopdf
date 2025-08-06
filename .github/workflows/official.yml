@@ -20,17 +20,15 @@ jobs:
         with:
           repository: wkhtmltopdf/packaging
           path: packaging
-      - name: Locate Visual Studio & set VS140COMNTOOLS
+      - name: Locate VS & set VS140COMNTOOLS to the correct Build folder
         shell: pwsh
         run: |
-          # find the latest VS installation
           $vsInstall = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
             -latest -products * `
             -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
             -property installationPath
-          # point the old VS140COMNTOOLS at its Common7\Tools folder
-          $toolsDir = Join-Path $vsInstall 'Common7\Tools\'
-          echo "VS140COMNTOOLS=$toolsDir" >> $env:GITHUB_ENV
+          $auxBuild = Join-Path $vsInstall 'VC\Auxiliary\Build'
+          echo "VS140COMNTOOLS=$auxBuild" >> $env:GITHUB_ENV
 
       - name: setup build environment
         run: |
