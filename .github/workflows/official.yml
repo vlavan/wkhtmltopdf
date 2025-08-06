@@ -43,5 +43,5 @@ jobs:
         run: |
           cd packaging
           python build msvc2015-win64 \
-            --clean \
+            --clean `
             --version - - ../wkhtmltopdf
