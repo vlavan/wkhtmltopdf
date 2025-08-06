@@ -8,7 +8,7 @@ on:
 jobs:
   windows:
     name: Qt 4.8 on Windows
-    runs-on: windows-2022
+    runs-on: windows-latest
     steps:
       - name: checkout source
         uses: actions/checkout@v3
@@ -21,6 +21,27 @@ jobs:
           repository: vlavan/packaging
           path: packaging
           ref: fix-vs-path-setup
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Conan
+        run: pip install conan
+
+      - name: Generate default Conan profile
+        run: conan profile detect
+
+      - name: Build wkhtmltopdf for msvc2015-win64
+        working-directory: packaging
+        run: |
+          python ./build \
+            vagrant \
+            msvc2015-win64 \
+            --clean \
+            --version - - \
+            ../wkhtmltopdf
 
       - name: Manually set VS140COMNTOOLS for script compatibility
         shell: pwsh
