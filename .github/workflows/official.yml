@@ -1,7 +1,7 @@
 name: Official
 on:
   push:
-    branches: [master, TestBranch]
+    branches: [master, TestBranch, fix-vs-path-setup]
   pull_request:
     branches: [master]
   workflow_dispatch:
@@ -11,15 +11,16 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: wkhtmltopdf
           submodules: true
       - name: checkout packaging
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          repository: wkhtmltopdf/packaging
+          repository: vlavan/packaging
           path: packaging
+          ref: fix-vs-path-setup
 
       - name: Manually set VS140COMNTOOLS for script compatibility
         shell: pwsh
