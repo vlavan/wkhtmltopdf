@@ -36,11 +36,11 @@ jobs:
       - name: Build wkhtmltopdf for msvc2015-win64
         working-directory: packaging
         run: |
-          python ./build \
-            vagrant \
-            msvc2015-win64 \
-            --clean \
-            --version - - \
+          python ./build `
+            vagrant `
+            msvc2015-win64 `
+            --clean `
+            --version - - `
             ../wkhtmltopdf
 
       - name: Manually set VS140COMNTOOLS for script compatibility
