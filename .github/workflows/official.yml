@@ -33,6 +33,9 @@ jobs:
       - name: Generate default Conan profile
         run: conan profile detect
 
+      - name: Create msvc2015-win64 profile
+        run: conan profile new msvc2015-win64 --detect
+
       - name: Build wkhtmltopdf for msvc2015-win64
         working-directory: packaging
         run: |
