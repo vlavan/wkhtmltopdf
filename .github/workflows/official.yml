@@ -24,24 +24,20 @@ jobs:
           repository: wkhtmltopdf/packaging
           path: packaging
 
-      - name: Setup Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install Conan 2.x
+      - name: Install Python & Conan
         run: |
+          choco install -y python3
           python -m pip install --upgrade pip
-          python -m pip install conan
+          python -m pip install --upgrade conan
 
-      - name: Verify Conan
+      - name: Verify Conan 2.x
         run: |
           conan --version
           where conan
 
       - name: Configure Conan profile
         run: |
-          conan profile detect
+          conan profile detect --force
           conan config set profiles.default.settings.compiler.runtime=dynamic
           conan config set profiles.default.settings.compiler.cppstd=14
 
