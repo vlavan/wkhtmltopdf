@@ -28,10 +28,11 @@ jobs:
       - name: Install Conan v1
         run: pip install "conan<2"
 
-      - name: Detect & tweak default profile
-        run: |
-          conan profile detect             # create default
-          conan profile update settings.compiler.runtime=dynamic default
+      - name: Create default profile
+        run: conan profile new default --detect
+
+      - name: Switch to dynamic runtime
+        run: conan profile update settings.compiler.runtime=dynamic default
 
       - name: Install build tools & deps
         run: |
