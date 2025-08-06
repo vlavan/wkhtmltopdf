@@ -25,13 +25,13 @@ jobs:
           repository: wkhtmltopdf/packaging
           path: packaging
 
-      - name: Install Conan v1
+      - name: Install Conan 1.x
         run: pip install "conan<2"
 
-      - name: Create default profile
+      - name: Create & detect default profile
         run: conan profile new default --detect
 
-      - name: Switch to dynamic runtime
+      - name: Switch runtime to dynamic
         run: conan profile update settings.compiler.runtime=dynamic default
 
       - name: Install build tools & deps
