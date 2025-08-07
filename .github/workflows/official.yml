@@ -68,7 +68,7 @@ jobs:
 
       # 9) (Optional) Upload the .exe for later download
       - name: Upload Windows binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wkhtmltopdf-windows
           path: packaging/bin/wkhtmltopdf.exe
