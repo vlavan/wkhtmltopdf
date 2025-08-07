@@ -59,6 +59,13 @@ jobs:
         run: |
           conan config install packaging/conan-config --type dir
 
+      - name: Point packaging at VS2022’s vcvarsall.bat
+        shell: pwsh
+        run: |
+          # Where VS2022 keeps vcvarsall.bat:
+          $vs2022Build = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build"
+          echo "VS140COMNTOOLS=$vs2022Build" >> $Env:GITHUB_ENV
+
       # 8) Build with the Windows/Vagrant target (use Bash so “\” works if you split lines)
       - name: Build wkhtmltopdf natively
         shell: bash
