@@ -35,6 +35,17 @@ jobs:
           conan --version
           where conan
 
+        # ←←← NEW STEP TO SATISFY VS140COMNTOOLS
+      - name: Locate Visual Studio & set VS140COMNTOOLS
+        shell: pwsh
+        run: |
+          $vsInstall = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+            -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath
+          $toolsDir = Join-Path $vsInstall 'Common7\Tools\'
+          echo "VS140COMNTOOLS=$toolsDir" >> $env:GITHUB_ENV
+
       - name: Install Conan configuration
         run: |
           conan config install packaging/conan-config --type dir
