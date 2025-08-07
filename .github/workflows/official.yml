@@ -14,31 +14,16 @@ jobs:
       CONAN_USER_HOME: C:\.conan
 
     steps:
-      # 1) Check out wkhtmltopdf sources
       - uses: actions/checkout@v3
         with:
           path: wkhtmltopdf
           submodules: true
 
-      # 2) Check out your packaging fork (which must contain conan-config/profiles/default)
       - uses: actions/checkout@v3
         with:
           repository: vlavan/packaging
           path: packaging
 
-      # 3) Install the VS2015 Build Tools (needed by build_vagrant)
-      - name: Install VS2015 Build Tools
-        shell: powershell
-        run: |
-          choco install -y visualstudio2015buildtools
-
-      # 4) Point the packaging script at VS2015’s vcvarsall.bat
-      - name: Set VS140COMNTOOLS
-        shell: powershell
-        run: |
-          echo "VS140COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC" >> $Env:GITHUB_ENV
-
-      # 5) Install Python & Conan
       - name: Install Python & Conan
         shell: powershell
         run: |
@@ -46,34 +31,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install conan
 
-      # 6) Verify we have Conan 2.x on PATH
       - name: Verify Conan 2.x
         shell: powershell
         run: |
           conan --version
           where conan
 
-      # 7) Pull in your custom profile from packaging/conan-config
       - name: Install Conan configuration
         shell: powershell
         run: |
           conan config install packaging/conan-config --type dir
 
+      # ← Here we point the old VS140COMNTOOLS at VS2022’s vcvarsall.bat
       - name: Point packaging at VS2022’s vcvarsall.bat
         shell: pwsh
         run: |
-          # Where VS2022 keeps vcvarsall.bat:
           $vs2022Build = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build"
           echo "VS140COMNTOOLS=$vs2022Build" >> $Env:GITHUB_ENV
 
-      # 8) Build with the Windows/Vagrant target (use Bash so “\” works if you split lines)
       - name: Build wkhtmltopdf natively
         shell: bash
         run: |
           cd packaging
           python build vagrant msvc2015-win64 --clean --version - - ../wkhtmltopdf
 
-      # 9) (Optional) Upload the .exe for later download
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4
         with:
